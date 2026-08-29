@@ -1,4 +1,4 @@
-﻿Attribute VB_Name = "modCommandHelp"
+Attribute VB_Name = "modCommandHelp"
 Option Explicit
 
 Public Sub FAS_ShowCommandHelp()

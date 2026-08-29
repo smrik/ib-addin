@@ -1,4 +1,4 @@
-﻿[CmdletBinding()]
+[CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
     [string]$WorkbookPath,
@@ -142,6 +142,39 @@ function Import-FileComponent {
     [void]$VBProject.VBComponents.Import($File.FullName)
 }
 
+function Get-DocumentModuleCode {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path
+    )
+
+    # Document modules are exported with a .cls header (VERSION / BEGIN..END /
+    # Attribute lines). Only the code below that header may be pushed into an
+    # existing document component - inserting the header makes the whole project
+    # fail to compile with "Expected: end of statement".
+    $lines = Get-Content -LiteralPath $Path
+    $startIndex = 0
+    $inBeginBlock = $false
+
+    for ($i = 0; $i -lt $lines.Count; $i++) {
+        $line = $lines[$i].Trim()
+
+        if ($inBeginBlock) {
+            $startIndex = $i + 1
+            if ($line -eq "End" -or $line -eq "END") { $inBeginBlock = $false }
+            continue
+        }
+        if ($line -match "^VERSION\s") { $startIndex = $i + 1; continue }
+        if ($line -eq "BEGIN") { $inBeginBlock = $true; $startIndex = $i + 1; continue }
+        if ($line -match "^Attribute\s") { $startIndex = $i + 1; continue }
+        if ($line -eq "") { continue }
+        break
+    }
+
+    if ($startIndex -ge $lines.Count) { return "" }
+    return ($lines[$startIndex..($lines.Count - 1)] -join [Environment]::NewLine)
+}
+
 function Set-DocumentModuleCode {
     param(
         [Parameter(Mandatory = $true)]
@@ -152,7 +185,7 @@ function Set-DocumentModuleCode {
     )
 
     $component = $VBProject.VBComponents.Item($File.BaseName)
-    $codeText = Get-Content -LiteralPath $File.FullName -Raw
+    $codeText = Get-DocumentModuleCode -Path $File.FullName
     Set-CodeModuleContent -CodeModule $component.CodeModule -CodeText $codeText
 }
 

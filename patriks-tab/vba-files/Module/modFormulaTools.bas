@@ -1,4 +1,4 @@
-﻿Attribute VB_Name = "modFormulaTools"
+Attribute VB_Name = "modFormulaTools"
 Option Explicit
 
 Private Const FAS_ROUND_DIGITS_SETTING As String = "Formula.RoundDigits"
@@ -158,7 +158,10 @@ Private Function FAS_TryParseWholeNumber(ByVal valueText As String, ByRef parsed
 End Function
 
 Public Sub FAS_WrapSelectedFormulasIfError()
-    FAS_WrapSelectedFormulas "IFERROR", """"
+    ' Six quotes produce the two-character literal "" so the result is
+    ' =IFERROR(<formula>,""). Four quotes yield a single " and build a
+    ' malformed formula that Excel rejects.
+    FAS_WrapSelectedFormulas "IFERROR", """"""
 End Sub
 
 Private Sub FAS_WrapSelectedFormulas(ByVal wrapperName As String, ByVal secondArgument As String)

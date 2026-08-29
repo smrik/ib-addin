@@ -1,4 +1,4 @@
-﻿Attribute VB_Name = "modPasteTools"
+Attribute VB_Name = "modPasteTools"
 Option Explicit
 
 Public Sub FAS_PasteValuesOnly()

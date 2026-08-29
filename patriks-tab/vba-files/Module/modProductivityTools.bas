@@ -60,7 +60,10 @@ End Sub
 
 ' Insert a delta sign in the active cell. Existing text is preserved.
 Public Sub FAS_InsertDelta()
-    Dim activeCell As Range
+    ' Do not name this local activeCell. VBA is case-insensitive, so such a local
+    ' shadows the global ActiveCell property and "Set activeCell = ActiveCell"
+    ' assigns the uninitialised local to itself; every later use raises error 91.
+    Dim targetCell As Range
     Dim currentText As String
     Dim undoStarted As Boolean
 
@@ -69,26 +72,26 @@ Public Sub FAS_InsertDelta()
         Exit Sub
     End If
 
-    Set activeCell = ActiveCell
+    Set targetCell = Application.ActiveCell
     On Error GoTo InsertFailed
 
-    If activeCell.HasFormula Then
+    If targetCell.HasFormula Then
         FAS_SetStatus "Delta was not inserted into a formula cell. Select a blank or text cell."
         Exit Sub
     End If
 
-    If IsError(activeCell.Value2) Then
+    If IsError(targetCell.Value2) Then
         FAS_SetStatus "Delta was not inserted into an error cell. Select a blank or text cell."
         Exit Sub
     End If
 
-    If Not FAS_UndoBeginRange(activeCell, "Insert delta") Then Exit Sub
+    If Not FAS_UndoBeginRange(targetCell, "Insert delta") Then Exit Sub
     undoStarted = True
-    currentText = CStr(activeCell.Value2)
+    currentText = CStr(targetCell.Value2)
     If Len(currentText) = 0 Then
-        activeCell.Value2 = ChrW$(916)
+        targetCell.Value2 = ChrW$(916)
     Else
-        activeCell.Value2 = currentText & " " & ChrW$(916)
+        targetCell.Value2 = currentText & " " & ChrW$(916)
     End If
 
     FAS_SetStatus "Delta sign inserted."

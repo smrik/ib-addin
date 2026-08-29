@@ -461,8 +461,13 @@ try {
     $plStandaloneSheet.Activate() | Out-Null
     $plStandaloneSheet.Range("H5").Select() | Out-Null
     $excel.Run("'patriks-tab.xlam'!FAS_PasteLinks") | Out-Null
-    if ($plStandaloneSheet.Range("H5").Formula -ne "='Random Sheet'!`$C`$10") {
-        throw "Linked paste produced '$($plStandaloneSheet.Range("H5").Formula)'."
+    # FAS_CopyLinkedCell links formula cells and copies constants as values, so
+    # labels keep their meaning instead of becoming references. Assert both branches.
+    if ($plStandaloneSheet.Range("H5").Formula -ne "linked value") {
+        throw "Linked paste of a constant produced '$($plStandaloneSheet.Range("H5").Formula)'; expected the value itself."
+    }
+    if ($plStandaloneSheet.Range("I5").Formula -ne "='Random Sheet'!`$D`$10") {
+        throw "Linked paste of a formula produced '$($plStandaloneSheet.Range("I5").Formula)'; expected a link."
     }
     if ([int]$plStandaloneSheet.Range("H5").Font.Color -ne 255) {
         throw "Linked paste did not copy source formatting."

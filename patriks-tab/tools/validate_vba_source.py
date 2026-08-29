@@ -39,6 +39,26 @@ duplicate_names = sorted({
 assert not missing_callbacks, f"Missing Ribbon callbacks: {missing_callbacks}"
 assert not duplicate_names, f"Duplicate public procedures: {duplicate_names}"
 
+# VBA imports .bas/.cls/.frm as ANSI. A UTF-8 BOM survives as stray characters
+# ahead of "Attribute VB_Name", which fails the whole project with
+# "Compile error: Expected: end of statement" - and every macro then reports
+# itself as unavailable, which looks nothing like an encoding problem.
+bom_files = sorted(
+    str(path.relative_to(ROOT))
+    for path in source_paths
+    if path.read_bytes().startswith(b"\xef\xbb\xbf")
+)
+assert not bom_files, f"VBA source files must not start with a UTF-8 BOM: {bom_files}"
+
+# VBA is case-insensitive, so a local named like an Excel global shadows it.
+# "Dim activeCell As Range" then makes "Set activeCell = ActiveCell" assign the
+# uninitialised local to itself, and every later use raises run-time error 91.
+shadowed = sorted(set(re.findall(
+    r"(?im)^\s*Dim\s+(activeCell|activeSheet|activeWorkbook|selection|application)\s+As\s",
+    source_text,
+)))
+assert not shadowed, f"Locals shadow Excel globals: {shadowed}"
+
 required_symbols = [
     "FAS_TryRunFormatCycleCommand",
     "FAS_IsFormatCycleCommand",

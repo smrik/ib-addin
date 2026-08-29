@@ -1,4 +1,4 @@
-﻿Attribute VB_Name = "modCommandRegistry"
+Attribute VB_Name = "modCommandRegistry"
 Option Explicit
 
 Public Function FAS_RunCommand(ByVal commandText As String) As Boolean
