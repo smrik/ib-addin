@@ -10,12 +10,20 @@ Office VBA productivity add-ins for financial advisory / investment banking work
 
 | Project | Host | Source | Artifact |
 |---|---|---|---|
-| `patriks-tab` | Excel — **canonical** | `vba-files/{Module,Class,Form}`, `ribbons/customUI14.xml` | `dist/patriks-tab.xlam` |
+| `patriks-tab` | Excel — **canonical** | `vba-files/{Module,Class,Form}`, `ribbons/customUI14.xml` | `patriks-tab.xlam` |
 | `Instrumenta` | PowerPoint | `src/{Modules,Classes,Forms,CustomUI}` + `src/InstrumentaPowerpointToolbar.pptm` | `bin/*.ppam` |
 | `Instrumenta-Keys` | standalone | `src/windows/*.ps1`, `src/mac/*` | packaged exe |
 | `fas-excel-toolkit` | **retired** | see [RETIRED.md](fas-excel-toolkit/RETIRED.md) | — |
 
-`fas-excel-toolkit` and `patriks-tab` were the same Excel codebase, forked both ways. They were merged into `patriks-tab` on 2026-08-29. Do not add features to `fas-excel-toolkit`; it survives only as a recovery copy until the ported smoke test passes on a machine with VBA project object model access enabled.
+`fas-excel-toolkit` and `patriks-tab` were the same Excel codebase, forked both ways. They were merged into `patriks-tab` on 2026-08-29 and `fas-excel-toolkit` was deleted; recover it with `git checkout a651c52 -- fas-excel-toolkit` if the ported build turns out broken.
+
+## Archiving and versioning
+
+Git is the archive. Do **not** hand-roll recovery copies — the `.corrupt-*.pptm`, `.sync-failed-*.pptm`, `*.failed-*.xlam` files and the ad-hoc `backups/` folders in this tree all predate version control and should not be added to. Instead:
+
+- commit before a risky Office build; the working tree is the recovery point
+- tag releases (`git tag v1.2.3`) and build the shipped ZIP with `tools\package-fas-addins.ps1 -Version 1.2.3`, which writes into `releases/` (gitignored)
+- `publish_addin.ps1` still keeps timestamped copies in the AddIns `history` folder, which is machine state, not repo state
 
 **`Instrumenta/README.md` is the upstream project's README and contradicts this workspace.** It says all coding happens inside the `.pptm` and the `.bas` files are "for reference only". Here the inverted rule applies: `src/Modules` etc. are authoritative and `instrumenta-build.ps1 -SyncVba` imports them into the PPTM. Files named `InstrumentaPowerpointToolbar.corrupt-*.pptm` / `.sync-failed-*.pptm` are recovery backups, never build inputs.
 
@@ -57,7 +65,9 @@ powershell -ExecutionPolicy Bypass -File .\patriks-tab\tools\publish_addin.ps1 -
 
 `publish_addin.ps1` is the full flow: build-if-changed → smoke test → timestamped backup → replace the installed add-in in `%APPDATA%\Microsoft\AddIns`. Testing a change in your *installed* Excel requires publish, not just build.
 
-**Two build paths exist — only one is authoritative.** `patriks-tab/config.json` points the XVBA VS Code extension at `patriks-tab/patriks-tab.xlam`, while `tools\build_xlam.ps1` builds `patriks-tab/dist/patriks-tab.xlam`. Same filename, different directories, which is exactly how the original fork started. **The PowerShell build is authoritative**; treat XVBA sync as a dev-loop convenience only, and never ship the root-level `.xlam`.
+**One artifact, one path.** Both the XVBA extension (via `config.json`'s `excel_file`) and `tools\build_xlam.ps1` target `patriks-tab/patriks-tab.xlam`. Keep it that way — two same-named `.xlam` files in different directories is exactly how the original fork started. XVBA drives the fast edit loop; the PowerShell scripts are the reliable build/test/publish path. Both write the same file.
+
+**XVBA is Excel-only.** Its `config.json` has an `excel_file` key and no PowerPoint equivalent, so there is no single dev loop spanning both hosts. PowerPoint stays on `.pptm` + `instrumenta-build.ps1 -SyncVba`.
 
 Note that `smoke_test.ps1` writes to your live `%APPDATA%\FAS_Toolkit` settings — it sets `Formula.RoundDigits=2` and then asserts a bare `round` reuses it. That persistence is required by the test, not incidental.
 

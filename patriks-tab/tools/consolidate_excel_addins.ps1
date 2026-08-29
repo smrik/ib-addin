@@ -1,6 +1,6 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
-    [string]$CanonicalAddInName = "FAS_Toolkit.xlam",
+    [string]$CanonicalAddInName = "patriks-tab.xlam",
     [switch]$ForceCloseExcel,
     [switch]$WhatIfOnly
 )
@@ -12,7 +12,7 @@ $repoRoot = Split-Path -Path $PSScriptRoot -Parent
 $addInsFolder = Join-Path $env:APPDATA "Microsoft\AddIns"
 $historyFolder = Join-Path $addInsFolder "history"
 $canonicalPath = Join-Path $addInsFolder $CanonicalAddInName
-$builtPath = Join-Path $repoRoot "dist\FAS_Toolkit.xlam"
+$builtPath = Join-Path $repoRoot "patriks-tab.xlam"
 $duplicateNames = @(
     'Patriks_Toolkit.xlam',
     'Patriks_Toolkit_v1.xlam',

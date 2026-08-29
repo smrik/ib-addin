@@ -5,6 +5,7 @@
 /.crush/
 /.codex/
 /.agents/
+/.serena/
 **/.git.nested-backup/
 
 # Nested development logs and temporary folders

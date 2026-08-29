@@ -1,6 +1,6 @@
 ﻿[CmdletBinding()]
 param(
-    [string]$AddInPath = ".\dist\patriks-tab.xlam",
+    [string]$AddInPath = ".\patriks-tab.xlam",
 
     [string]$Caption = "TEST INSTANCE",
 

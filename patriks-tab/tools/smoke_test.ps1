@@ -9,7 +9,7 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path -Path $PSScriptRoot -Parent
 $buildScript = Join-Path $PSScriptRoot "build_xlam.ps1"
-$addInPath = Join-Path $repoRoot "dist\patriks-tab.xlam"
+$addInPath = Join-Path $repoRoot "patriks-tab.xlam"
 $tempWorkbookPath = Join-Path ([System.IO.Path]::GetTempPath()) ("PatriksTab_Smoke_" + [System.Guid]::NewGuid().ToString("N") + ".xlsx")
 $smokeLogPath = Join-Path ([System.IO.Path]::GetTempPath()) "PatriksTab_Smoke_Last.log"
 $glSheetName = "Dnevnik knji" + [char]0x017E + "enja"

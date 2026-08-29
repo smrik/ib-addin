@@ -1,7 +1,7 @@
 ﻿[CmdletBinding()]
 param(
     [string]$TemplatePath,
-    [string]$OutputPath = ".\dist\patriks-tab.xlam",
+    [string]$OutputPath = ".\patriks-tab.xlam",
     [switch]$Visible,
     [switch]$Force,
     [switch]$ForceCloseExcel

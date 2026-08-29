@@ -12,7 +12,7 @@ $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path -Path $PSScriptRoot -Parent
 $buildScript = Join-Path $PSScriptRoot "build_xlam.ps1"
 $smokeScript = Join-Path $PSScriptRoot "smoke_test.ps1"
-$builtAddInPath = Join-Path $repoRoot "dist\patriks-tab.xlam"
+$builtAddInPath = Join-Path $repoRoot "patriks-tab.xlam"
 $installedFolder = Split-Path -Path $InstalledPath -Parent
 $historyFolder = Join-Path $installedFolder "history"
 

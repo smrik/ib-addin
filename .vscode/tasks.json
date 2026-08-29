@@ -147,7 +147,7 @@
       "id": "excelWorkbookPath",
       "type": "promptString",
       "description": "Full path of the open Excel dev workbook or add-in",
-      "default": "${workspaceFolder}\\patriks-tab\\dist\\patriks-tab.xlam"
+      "default": "${workspaceFolder}\\patriks-tab\\patriks-tab.xlam"
     },
     {
       "id": "testInstanceCaption",

@@ -1,11 +1,11 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param()
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $repoRoot = Split-Path -Path $PSScriptRoot -Parent
-$formSourcePath = Join-Path $repoRoot "src\vba\forms\frmFASCommandPalette.frm"
+$formSourcePath = Join-Path $repoRoot "vba-files\Form\frmFASCommandPalette.frm"
 $formBinaryPath = [System.IO.Path]::ChangeExtension($formSourcePath, ".frx")
 $tempFolder = Join-Path ([System.IO.Path]::GetTempPath()) ("FAS_CommandPalette_" + [guid]::NewGuid().ToString("N"))
 $exportFormPath = Join-Path $tempFolder "frmFASCommandPalette.frm"
