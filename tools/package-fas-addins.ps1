@@ -1,4 +1,4 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
     [string]$Version,
@@ -68,10 +68,10 @@ New-Item -ItemType Directory -Force -Path $ReleaseRoot | Out-Null
 $Definitions = @{
     Excel = [pscustomobject]@{
         id = "excel"
-        name = "FAS_Toolkit.xlam"
-        sourcePath = "fas-excel-toolkit/dist/FAS_Toolkit.xlam"
-        packagePath = "Excel/FAS_Toolkit.xlam"
-        installPath = "%APPDATA%\Microsoft\AddIns\FAS_Toolkit.xlam"
+        name = "patriks-tab.xlam"
+        sourcePath = "patriks-tab/patriks-tab.xlam"
+        packagePath = "Excel/patriks-tab.xlam"
+        installPath = "%APPDATA%\Microsoft\AddIns\patriks-tab.xlam"
     }
     PowerPoint = [pscustomobject]@{
         id = "powerpoint"
@@ -107,19 +107,19 @@ if ($Include -contains "Excel") {
     $SupportDefinitions = @(
         [pscustomobject]@{
             id = "fas_project_tool"
-            sourcePath = "fas-excel-toolkit/tools/fas_project.ps1"
+            sourcePath = "patriks-tab/tools/fas_project.ps1"
             packagePath = "Excel/Tools/fas_project.ps1"
             installPath = "%APPDATA%\FAS_Toolkit\Tools\fas_project.ps1"
         },
         [pscustomobject]@{
             id = "fas_search_index_builder"
-            sourcePath = "fas-excel-toolkit/tools/build_search_index.ps1"
+            sourcePath = "patriks-tab/tools/build_search_index.ps1"
             packagePath = "Excel/Tools/build_search_index.ps1"
             installPath = "%APPDATA%\FAS_Toolkit\Tools\build_search_index.ps1"
         },
         [pscustomobject]@{
             id = "fas_search_index_query"
-            sourcePath = "fas-excel-toolkit/tools/query_search_index.ps1"
+            sourcePath = "patriks-tab/tools/query_search_index.ps1"
             packagePath = "Excel/Tools/query_search_index.ps1"
             installPath = "%APPDATA%\FAS_Toolkit\Tools\query_search_index.ps1"
         }

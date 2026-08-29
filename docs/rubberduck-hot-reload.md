@@ -10,10 +10,12 @@ Rubberduck's `Update Components from Files...` replaces components with matching
 
 ## Host and source paths
 
+Paths are relative to the repository root, so they work on any checkout.
+
 | Host | Development container | VBA source |
 | --- | --- | --- |
-| Excel | `C:\Users\psmid\Documents\FAS Add-In\fas-excel-toolkit\dist\FAS_Toolkit.xlam` | `C:\Users\psmid\Documents\FAS Add-In\fas-excel-toolkit\src\vba` |
-| PowerPoint | `C:\Users\psmid\Documents\FAS Add-In\Instrumenta\bin\InstrumentaPowerpointToolbarDev.ppam` | `C:\Users\psmid\Documents\FAS Add-In\Instrumenta\src` |
+| Excel | `patriks-tab\patriks-tab.xlam` | `patriks-tab\vba-files` |
+| PowerPoint | `Instrumenta\bin\InstrumentaPowerpointToolbarDev.ppam` | `Instrumenta\src` |
 
 Source files are canonical. The `.xlam` and `.ppam` files are development containers, not source files and not production publication targets.
 

@@ -13,7 +13,6 @@ Office VBA productivity add-ins for financial advisory / investment banking work
 | `patriks-tab` | Excel — **canonical** | `vba-files/{Module,Class,Form}`, `ribbons/customUI14.xml` | `patriks-tab.xlam` |
 | `Instrumenta` | PowerPoint | `src/{Modules,Classes,Forms,CustomUI}` + `src/InstrumentaPowerpointToolbar.pptm` | `bin/*.ppam` |
 | `Instrumenta-Keys` | standalone | `src/windows/*.ps1`, `src/mac/*` | packaged exe |
-| `fas-excel-toolkit` | **retired** | see [RETIRED.md](fas-excel-toolkit/RETIRED.md) | — |
 
 `fas-excel-toolkit` and `patriks-tab` were the same Excel codebase, forked both ways. They were merged into `patriks-tab` on 2026-08-29 and `fas-excel-toolkit` was deleted; recover it with `git checkout a651c52 -- fas-excel-toolkit` if the ported build turns out broken.
 

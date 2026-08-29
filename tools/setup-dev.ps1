@@ -81,9 +81,7 @@ if ($InstallNodeDependencies) {
     }
 
     $NodeProjects = @(
-        (Join-Path $RepoRoot "fas-excel-toolkit\src\vba"),
-        (Join-Path $RepoRoot "patriks-tab"),
-        (Join-Path $RepoRoot "bootstrap test")
+        (Join-Path $RepoRoot "patriks-tab")
     )
 
     foreach ($project in $NodeProjects) {
