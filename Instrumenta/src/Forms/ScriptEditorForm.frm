@@ -1,0 +1,343 @@
+Attribute VB_Name = "ScriptEditorForm"
+Attribute VB_Base = "0{04BF08C7-F34F-4209-9C92-5E0E7505295E}{77516EDD-5710-4D08-98BF-6974650B4014}"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Attribute VB_TemplateDerived = False
+Attribute VB_Customizable = False
+'MIT License
+'Copyright (c) 2021 - 2026 iappyx
+
+'Permission is hereby granted, free of charge, to any person obtaining a copy
+'of this software and associated documentation files (the "Software"), to deal
+'in the Software without restriction, including without limitation the rights
+'to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+'copies of the Software, and to permit persons to whom the Software is
+'furnished to do so, subject to the following conditions:
+
+'The above copyright notice and this permission notice shall be included in all
+'copies or substantial portions of the Software.
+
+'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+'IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+'FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+'AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+'LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+'OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+'SOFTWARE.
+
+
+Option Explicit
+
+Private Const APP_KEY      As String = "Instrumenta"
+Private Const SECTION_DATA As String = "ISCRPresetData"
+Private Const NAMES_KEY    As String = "PresetNames"
+Dim NAMES_SEP As String
+
+
+Private Sub btnRun_Click()
+    If Trim(txtScript.text) = "" Then
+        MsgBox "Please enter a script first.", vbInformation
+        Exit Sub
+    End If
+
+    txtLog.text = ""
+
+    RunInstrumentaScript txtScript.text
+
+    Dim msg As Variant
+    Dim logText As String
+    For Each msg In IScr_ScriptLog
+        logText = logText & msg & vbCrLf
+    Next msg
+    txtLog.text = logText
+
+    txtLog.selStart = 0
+End Sub
+
+Private Sub btnClear_Click()
+    If MsgBox("Clear the script?", vbQuestion + vbYesNo) = vbYes Then
+        txtScript.text = ""
+        txtScript.SetFocus
+    End If
+End Sub
+
+Private Sub btnClearLog_Click()
+    txtLog.text = ""
+End Sub
+
+Private Sub btnExample_Click()
+    Dim example As String
+    example = "# Instrumenta Script Example" & vbCrLf
+    example = example & "# Lines starting with # are comments" & vbCrLf
+    example = example & "" & vbCrLf
+    example = example & "# Make script re-runnable by cleaning up first" & vbCrLf
+    example = example & "DELETE WHERE name STARTSWITH ""script_""" & vbCrLf
+    example = example & "" & vbCrLf
+    example = example & "# Insert a rectangle and style it" & vbCrLf
+    example = example & "INSERT RECTANGLE AT 50, 50 WIDTH 300 HEIGHT 200 NAME ""script_box""" & vbCrLf
+    example = example & "SET fill.color = #003366" & vbCrLf
+    example = example & "SET font.color = #FFFFFF" & vbCrLf
+    example = example & "" & vbCrLf
+    example = example & "# Insert a title textbox" & vbCrLf
+    example = example & "INSERT TEXTBOX AT 60, 60 WIDTH 280 HEIGHT 40 NAME ""script_title"" TEXT ""My Title""" & vbCrLf
+    example = example & "SET font.size = 18" & vbCrLf
+    example = example & "SET font.bold = TRUE" & vbCrLf
+    example = example & "" & vbCrLf
+    example = example & "# Select shapes by name prefix and call an Instrumenta function" & vbCrLf
+    example = example & "SELECT WHERE name STARTSWITH ""script_""" & vbCrLf
+    example = example & "CALL ObjectsAlignTops" & vbCrLf
+    example = example & "" & vbCrLf
+    example = example & "# After CALL, re-sync working set explicitly if needed" & vbCrLf
+    example = example & "USE SELECTION" & vbCrLf
+    example = example & "SET font.name = ""Calibri""" & vbCrLf
+
+    If Trim(txtScript.text) <> "" Then
+        If MsgBox("Replace current script with example?", vbQuestion + vbYesNo) = vbNo Then
+            Exit Sub
+        End If
+    End If
+
+    txtScript.text = example
+    txtScript.SetFocus
+End Sub
+
+Private Sub btnClose_Click()
+    If UnsavedChanges() Then
+        Dim answer As Integer
+        answer = MsgBox("The current script has not been saved as a preset." & vbCrLf & "Close without saving?", vbQuestion + vbYesNo)
+        If answer = vbNo Then Exit Sub
+    End If
+    Unload Me
+End Sub
+
+
+
+Private Sub btnPresetSave_Click()
+    Dim presetName As String
+    presetName = Trim(txtPresetName.text)
+
+    If presetName = "" Then
+        If lstPresets.ListIndex >= 0 Then
+            presetName = lstPresets.value
+        Else
+            MsgBox "Enter a preset name first.", vbInformation
+            txtPresetName.SetFocus
+            Exit Sub
+        End If
+    End If
+
+    If Trim(txtScript.text) = "" Then
+        MsgBox "The script is empty � nothing to save.", vbInformation
+        Exit Sub
+    End If
+
+    If PresetExists(presetName) Then
+        If MsgBox("Overwrite preset """ & presetName & """?", vbQuestion + vbYesNo) = vbNo Then
+            Exit Sub
+        End If
+    End If
+
+    SaveSetting APP_KEY, SECTION_DATA, presetName, txtScript.text
+    PresetSaveName presetName
+
+    RefreshPresetList
+    SelectPresetInList presetName
+    txtPresetName.text = ""
+End Sub
+
+
+Private Sub btnPresetLoad_Click()
+    If lstPresets.ListIndex = -1 Then
+        MsgBox "Select a preset from the list first.", vbInformation
+        Exit Sub
+    End If
+
+    Dim presetName As String
+    presetName = lstPresets.value
+
+    If Trim(txtScript.text) <> "" Then
+        If MsgBox("Replace current script with """ & presetName & """?", vbQuestion + vbYesNo) = vbNo Then
+            Exit Sub
+        End If
+    End If
+
+    txtScript.text = PresetGetScript(presetName)
+    txtScript.SetFocus
+End Sub
+
+Private Sub btnPresetDelete_Click()
+    If lstPresets.ListIndex = -1 Then
+        MsgBox "Select a preset from the list first.", vbInformation
+        Exit Sub
+    End If
+
+    Dim presetName As String
+    presetName = lstPresets.value
+
+    If MsgBox("Delete preset """ & presetName & """?", vbQuestion + vbYesNo) = vbNo Then
+        Exit Sub
+    End If
+
+    DeleteSetting APP_KEY, SECTION_DATA, presetName
+    PresetDeleteName presetName
+    RefreshPresetList
+End Sub
+
+
+Private Sub lstPresets_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+    If lstPresets.ListIndex >= 0 Then
+        txtPresetName.text = lstPresets.value
+    End If
+End Sub
+
+
+Private Function PresetGetNames() As String
+    PresetGetNames = GetSetting(APP_KEY, SECTION_DATA, NAMES_KEY, "")
+End Function
+
+Private Function PresetExists(presetName As String) As Boolean
+    Dim names As String
+    names = PresetGetNames()
+    If names = "" Then Exit Function
+    Dim parts() As String
+    parts = Split(names, NAMES_SEP)
+    Dim i As Integer
+    For i = 0 To UBound(parts)
+        If LCase(parts(i)) = LCase(presetName) Then
+            PresetExists = True
+            Exit Function
+        End If
+    Next i
+End Function
+
+Private Function PresetGetScript(presetName As String) As String
+    PresetGetScript = GetSetting(APP_KEY, SECTION_DATA, presetName, "")
+End Function
+
+Private Sub PresetSaveName(presetName As String)
+    If PresetExists(presetName) Then Exit Sub
+    Dim names As String
+    names = PresetGetNames()
+    If names = "" Then
+        names = presetName
+    Else
+        names = names & NAMES_SEP & presetName
+    End If
+    SaveSetting APP_KEY, SECTION_DATA, NAMES_KEY, names
+End Sub
+
+Private Sub PresetDeleteName(presetName As String)
+    Dim names As String
+    names = PresetGetNames()
+    If names = "" Then Exit Sub
+    Dim parts() As String
+    parts = Split(names, NAMES_SEP)
+    Dim result As String
+    result = ""
+    Dim i As Integer
+    For i = 0 To UBound(parts)
+        If LCase(parts(i)) <> LCase(presetName) Then
+            If result = "" Then
+                result = parts(i)
+            Else
+                result = result & NAMES_SEP & parts(i)
+            End If
+        End If
+    Next i
+    SaveSetting APP_KEY, SECTION_DATA, NAMES_KEY, result
+End Sub
+
+Private Sub RefreshPresetList()
+    lstPresets.Clear
+    Dim names As String
+    names = PresetGetNames()
+    If names = "" Then GoTo Invalidate
+    Dim parts() As String
+    parts = Split(names, NAMES_SEP)
+    Dim i As Integer
+    For i = 0 To UBound(parts)
+        If parts(i) <> "" Then lstPresets.AddItem parts(i)
+    Next i
+Invalidate:
+    If Not InstrumentaRibbon Is Nothing Then
+    
+    InstrumentaRibbon.Invalidate
+       
+    End If
+End Sub
+
+Private Sub SelectPresetInList(presetName As String)
+    Dim i As Integer
+    For i = 0 To lstPresets.ListCount - 1
+        If LCase(lstPresets.List(i)) = LCase(presetName) Then
+            lstPresets.ListIndex = i
+            Exit Sub
+        End If
+    Next i
+End Sub
+
+Private Function UnsavedChanges() As Boolean
+    Dim currentScript As String
+    currentScript = Trim(txtScript.text)
+    If currentScript = "" Then Exit Function
+    Dim names As String
+    names = PresetGetNames()
+    If names = "" Then
+        UnsavedChanges = True
+        Exit Function
+    End If
+    Dim parts() As String
+    parts = Split(names, NAMES_SEP)
+    Dim i As Integer
+    For i = 0 To UBound(parts)
+        If PresetGetScript(parts(i)) = currentScript Then Exit Function
+    Next i
+    UnsavedChanges = True
+End Function
+
+
+
+Private Sub Label3_Click()
+    Dim URL As String
+    Dim tempPresentation As Presentation
+
+    URL = "https://github.com/iappyx/Instrumenta/blob/main/SCRIPT.md"
+
+    If Presentations.count = 0 Then
+        Set tempPresentation = Presentations.Add
+        tempPresentation.FollowHyperlink URL
+        tempPresentation.Close
+    Else
+        ActivePresentation.FollowHyperlink URL
+    End If
+End Sub
+
+
+Private Sub UserForm_Initialize()
+    NAMES_SEP = Chr(30)
+    If txtScript.text = "" Then
+        txtScript.text = "# Type your script here" & vbCrLf & "# Example: SELECT ALL"
+        txtLog.text = ""
+        txtLog.Locked = True
+    End If
+
+    Dim codeFontName As String
+    #If Mac Then
+        codeFontName = "Courier New"
+    #Else
+        codeFontName = "Consolas"
+    #End If
+
+    txtScript.Font.name = codeFontName
+    txtScript.Font.Size = 8
+    txtLog.Font.name = codeFontName
+    txtLog.Font.Size = 8
+    
+    
+
+    RefreshPresetList
+End Sub
+
+

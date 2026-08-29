@@ -1,0 +1,162 @@
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui">
+  <ribbon startFromScratch="false">
+    <tabs>
+      <tab id="tabFASToolkit" label="Patrik's Tab">
+        <group id="grpFASStart" label="Start">
+          <button id="btnFASCommandPalette" label="Command Palette" size="large" imageMso="FindDialog" onAction="Ribbon_ShowCommandPalette" screentip="Open FAS Command Palette" supertip="Search and run FAS commands from one place."/>
+          <button id="btnFASNavigator" label="Navigator" size="large" imageMso="FileOpen" onAction="Ribbon_ShowNavigator" screentip="Open Navigator" supertip="Navigate sheets and assigned workbook sections."/>
+          <button id="btnFASShortcutSettings" label="Settings" onAction="Ribbon_ShowShortcutSettings" screentip="Open FAS settings" supertip="Configure keyboard shortcuts and custom format cycles."/>
+          <button id="btnFASHelp" label="Help" imageMso="Help" onAction="Ribbon_ShowCommandHelp" screentip="Show command help" supertip="View available FAS commands and shortcuts."/>
+        </group>
+
+        <group id="grpFASNavigate" label="Navigate">
+          <button id="btnFASJumpToSheet" label="Jump to Sheet" size="large" imageMso="SheetInsert" onAction="Ribbon_JumpToSheet"/>
+          <menu id="menuFASCommonSheets" label="Common Sheets" size="large" imageMso="TableInsert">
+            <button id="btnFASGoToPL" label="P&amp;L" onAction="Ribbon_GoToPL"/>
+            <button id="btnFASGoToBS" label="BS" onAction="Ribbon_GoToBS"/>
+            <button id="btnFASGoToTB" label="TB" onAction="Ribbon_GoToTB"/>
+            <button id="btnFASGoToGL" label="GL" onAction="Ribbon_GoToGL"/>
+            <button id="btnFASGoToMapping" label="Mapping" onAction="Ribbon_GoToMapping"/>
+            <button id="btnFASWorkbookTabs" label="Workbook Tabs" onAction="Ribbon_ShowWorkbookTabsMenu"/>
+          </menu>
+        </group>
+
+        <group id="grpFASSearch" label="Search">
+          <menu id="menuFASSearch" label="Search" size="large" imageMso="FindDialog">
+            <button id="btnFASFindTBAccount" label="Find TB Account" onAction="Ribbon_FindTBAccount"/>
+            <button id="btnFASSearchLedgerIndex" label="Search Ledger" onAction="Ribbon_SearchLedgerIndex"/>
+          </menu>
+        </group>
+
+        <group id="grpFASFormulas" label="Formulas">
+          <menu id="menuFASFormulaTools" label="Formula Tools" size="large" imageMso="TracePrecedents">
+            <button id="btnFASCopyFormulasSmart" label="Copy Formulas Smart" onAction="Ribbon_CopyFormulasSmart"/>
+            <button id="btnFASReplaceFormulas" label="Replace in Formulas" onAction="Ribbon_ReplaceInSelectedFormulas"/>
+            <button id="btnFASRoundFormulas" label="Round Formulas (saved digits)" onAction="Ribbon_WrapSelectedFormulasRound"/>
+            <button id="btnFASIfErrorFormulas" label="Blank Errors in Formulas" onAction="Ribbon_WrapSelectedFormulasIfError"/>
+          </menu>
+          <menu id="menuFASIFSTools" label="IFS Tools" size="large" imageMso="FunctionWizard">
+            <button id="btnFASBuildSUMIFS" label="Build SUMIFS" onAction="Ribbon_BuildSUMIFS" screentip="Build a SUMIFS formula" supertip="Pick a measure range, criteria range, and criteria cell."/>
+            <button id="btnFASBuildCOUNTIFS" label="Build COUNTIFS" onAction="Ribbon_BuildCOUNTIFS" screentip="Build a COUNTIFS formula" supertip="Pick a criteria range and relative criteria cell."/>
+            <button id="btnFASCaptureIFSPattern" label="Copy IFS Pattern" onAction="Ribbon_CaptureIFSPattern" screentip="Capture an IFS pattern" supertip="Capture explicitly for safe filling; native Ctrl+C remains unchanged."/>
+            <button id="btnFASFillIFSPattern" label="Fill IFS Pattern" onAction="Ribbon_FillIFSPattern" screentip="Fill a captured IFS pattern" supertip="Only blanks and matching direct IFS shapes are eligible."/>
+            <menu id="menuFASSwitchIFS" label="Switch IFS Function">
+              <button id="btnFASSwitchSUMIFS" label="SUMIFS" onAction="Ribbon_SwitchToSUMIFS"/>
+              <button id="btnFASSwitchCOUNTIFS" label="COUNTIFS" onAction="Ribbon_SwitchToCOUNTIFS"/>
+              <button id="btnFASSwitchAVERAGEIFS" label="AVERAGEIFS" onAction="Ribbon_SwitchToAVERAGEIFS"/>
+              <button id="btnFASSwitchMINIFS" label="MINIFS" onAction="Ribbon_SwitchToMINIFS"/>
+              <button id="btnFASSwitchMAXIFS" label="MAXIFS" onAction="Ribbon_SwitchToMAXIFS"/>
+            </menu>
+          </menu>
+          <menu id="menuFASTrace" label="Trace" size="large" imageMso="TracePrecedents">
+            <button id="btnFASShowPrecedents" label="Show Precedents" onAction="Ribbon_ShowPrecedents"/>
+            <button id="btnFASCyclePrecedent" label="Cycle Precedent" onAction="Ribbon_CycleDirectPrecedent"/>
+            <button id="btnFASBackTraceOrigin" label="Back to Origin" onAction="Ribbon_BackToTraceOrigin"/>
+          </menu>
+        </group>
+
+        <group id="grpFASPaste" label="Paste">
+          <menu id="menuFASPasteTools" label="Paste Tools" size="large" imageMso="Paste">
+            <button id="btnFASPasteValues" label="Paste Values" onAction="Ribbon_PasteValuesOnly"/>
+            <button id="btnFASPasteText" label="Paste as Text" onAction="Ribbon_PasteAsTextOnly"/>
+            <button id="btnFASCopyVisible" label="Copy Visible Only" onAction="Ribbon_CopyVisibleOnly"/>
+            <button id="btnFASCopyLinks" label="Copy Links Source" onAction="Ribbon_CopyLinks"/>
+            <button id="btnFASPasteLinks" label="Paste Links + Style" onAction="Ribbon_PasteLinks"/>
+          </menu>
+          <menu id="menuFASSubtotals" label="Subtotals" size="large">
+            <button id="btnFASSubtotalAbove" label="Subtotal Above" onAction="Ribbon_InsertSubtotalAboveSelection"/>
+            <button id="btnFASSubtotalBelow" label="Subtotal Below" onAction="Ribbon_InsertSubtotalBelowSelection"/>
+          </menu>
+        </group>
+
+        <group id="grpFASFormatView" label="Format &amp; View">
+          <menu id="menuFASFormatting" label="Formatting" size="large">
+            <button id="btnFASCaptureColor" label="Capture Font Color" onAction="Ribbon_CaptureCurrentColor"/>
+            <button id="btnFASApplyColor" label="Apply Font Color" onAction="Ribbon_ApplyCurrentColor"/>
+            <button id="btnFASDelta" label="Insert Delta" onAction="Ribbon_InsertDelta"/>
+            <button id="btnFASAutoFitWidth" label="AutoFit Width +20%" onAction="Ribbon_AutoFitWidthWithMargin"/>
+          </menu>
+          <menu id="menuFASNumberFormats" label="Number Formats" size="large">
+            <button id="btnFASCycleNumberFormat" label="Cycle Number" onAction="Ribbon_CycleNumberFormat" screentip="Cycle number formats" supertip="Apply the next saved number format to the selection. Shortcut: Ctrl+Shift+1 by default."/>
+            <button id="btnFASCyclePercentFormat" label="Cycle Percent" onAction="Ribbon_CyclePercentFormat" screentip="Cycle percent formats" supertip="Apply the next saved percent format to the selection. Shortcut: Ctrl+Shift+5 by default."/>
+            <button id="btnFASCycleCurrencyFormat" label="Cycle Currency" onAction="Ribbon_CycleCurrencyFormat" screentip="Cycle currency formats" supertip="Apply the next saved currency format to the selection. Shortcut: Ctrl+Shift+4 by default."/>
+            <button id="btnFASFormatSettings" label="Format &amp; Shortcut Settings" onAction="Ribbon_ShowShortcutSettings" screentip="Open FAS settings" supertip="Edit shortcuts and one-custom-format-per-line cycle lists."/>
+          </menu>
+          <toggleButton id="tglFASHideGridlines" label="Hide Gridlines" keytip="G" onAction="Ribbon_ToggleHideGridlines" getPressed="Ribbon_GetHideGridlinesPressed" screentip="Keep worksheet gridlines hidden" supertip="When pressed, gridlines stay hidden whenever you activate or create a worksheet. The default is on."/>
+          <toggleButton id="tglFASOutlineAboveLeft" label="Outline Above / Left" keytip="O" onAction="Ribbon_ToggleOutlineAboveLeft" getPressed="Ribbon_GetOutlineAboveLeftPressed" screentip="Put outline summaries above and left" supertip="When pressed, worksheet outline summary rows stay above detail and summary columns stay left of detail. The default is on."/>
+        </group>
+
+        <group id="grpFASCharts" label="Charts">
+          <button id="btnFASFormatChart" label="Format Chart" size="large" imageMso="ChartInsert" onAction="Ribbon_FormatSelectedChartFAS"/>
+          <menu id="menuFASChartOptions" label="Chart Options" size="large" imageMso="ChartInsert">
+            <button id="btnFASFormatSeries" label="Format Series" onAction="Ribbon_FormatSelectedSeriesFAS"/>
+            <button id="btnFASLegendBottom" label="Legend Bottom" onAction="Ribbon_ChartLegendBottom"/>
+            <button id="btnFASLegendRight" label="Legend Right" onAction="Ribbon_ChartLegendRight"/>
+            <button id="btnFASLegendOff" label="Legend Off" onAction="Ribbon_ChartLegendOff"/>
+            <button id="btnFASGridlinesLight" label="Light Gridlines" onAction="Ribbon_ChartGridlinesLight"/>
+            <button id="btnFASGridlinesOff" label="Gridlines Off" onAction="Ribbon_ChartGridlinesOff"/>
+          </menu>
+        </group>
+
+        <group id="grpFASTools" label="Tools">
+          <button id="btnFASInsertDivider" label="Divider Sheet" imageMso="SheetInsert" onAction="Ribbon_InsertDividerSheet"/>
+          <menu id="menuFASToolsMore" label="More Tools" size="large" imageMso="HappyFace">
+            <button id="btnFASGroupByReport" label="Group By Report" imageMso="TableInsert" onAction="Ribbon_CreateGroupByReport" screentip="Create an editable Group By report" supertip="Use a selected GROUPBY formula or pick row-field and value ranges; output uses ordinary SUMIFS formulas."/>
+            <button id="btnFASGroupByReportCount" label="Group By + Count" imageMso="TableInsert" onAction="Ribbon_CreateGroupByReportWithCount" screentip="Create a Group By report with Count" supertip="Adds an ordinary COUNTIFS column to the editable report."/>
+            <button id="btnFASCapexSummary" label="CAPEX Summary" imageMso="TableInsert" onAction="Ribbon_CreateCapexSummary" screentip="Create an editable CAPEX Group By report" supertip="Select a CAPEX source table, then group Class I, Class II, and description with ordinary SUMIFS and COUNTIFS formulas."/>
+            <button id="btnFASBookmarks" label="Bookmarks" onAction="Ribbon_ShowActiveWorkbookBookmarks"/>
+            <button id="btnFASMappings" label="Mappings" onAction="Ribbon_ShowActiveWorkbookMappings"/>
+            <button id="btnFASDrilldown" label="Drilldown" onAction="Ribbon_ShowDrilldown"/>
+            <button id="btnFASFixObjects" label="Float Objects" onAction="Ribbon_SetShapesDoNotMoveOrSize"/>
+          </menu>
+        </group>
+      </tab>
+
+      <tab id="tabFASLab" label="FAS Lab">
+        <group id="grpFASUI2Showcase" label="UI2 Controls">
+          <splitButton id="spFASUI2Split" size="large" keytip="D">
+            <button id="btnFASUI2SplitDefault" label="Demo Action" imageMso="HappyFace" onAction="Ribbon_ShowcaseSplitDefault" screentip="UI2 split button" supertip="The large button is the default action; use its arrow for alternatives."/>
+            <menu id="menuFASUI2SplitOptions">
+              <button id="btnFASUI2SplitOptionA" label="Demo Option A" onAction="Ribbon_ShowcaseSplitOption"/>
+              <button id="btnFASUI2SplitOptionB" label="Demo Option B" onAction="Ribbon_ShowcaseSplitOption"/>
+              <menuSeparator id="sepFASUI2Split" title="More examples"/>
+              <button id="btnFASUI2SplitSettings" label="Open FAS Settings" onAction="Ribbon_ShowShortcutSettings"/>
+            </menu>
+          </splitButton>
+          <dynamicMenu id="dmFASUI2Sheets" label="Live Sheets" size="large" imageMso="TableInsert" keytip="L" invalidateContentOnDrop="true" getContent="Ribbon_ShowcaseGetSheets" screentip="UI2 dynamic menu" supertip="This menu is generated from the active workbook each time it opens."/>
+          <editBox id="ebFASUI2Search" label="Demo Search" sizeString="Account or ledger..." maxLength="120" keytip="Q" onChange="Ribbon_ShowcaseSearchChanged" screentip="UI2 edit box" supertip="A ribbon text input that can feed a search or filter."/>
+          <dropDown id="ddFASUI2Round" label="Round" keytip="R" onAction="Ribbon_ShowcaseRoundChanged" screentip="UI2 dropdown" supertip="A fixed list of choices; this demo only reports the selected value.">
+            <item id="itemFASUI2Round0" label="0 digits"/>
+            <item id="itemFASUI2Round1" label="1 digit"/>
+            <item id="itemFASUI2Round2" label="2 digits"/>
+            <item id="itemFASUI2Round3" label="3 digits"/>
+          </dropDown>
+        </group>
+
+        <group id="grpFASUI2State" label="UI2 State">
+          <toggleButton id="tglFASUI2Links" label="Keep Links" keytip="K" onAction="Ribbon_ShowcaseToggleLinks" getPressed="Ribbon_ShowcaseGetLinksPressed" screentip="UI2 toggle button" supertip="A pressed/unpressed state, suitable for persistent working modes."/>
+          <checkBox id="chkFASUI2Hidden" label="Include hidden rows" onAction="Ribbon_ShowcaseToggleHidden" getPressed="Ribbon_ShowcaseGetHiddenPressed" screentip="UI2 checkbox" supertip="A simple on/off option, suitable for paste and search preferences."/>
+          <buttonGroup id="bgFASUI2Buttons">
+            <button id="btnFASUI2Capture" label="Capture" onAction="Ribbon_ShowcaseButton" screentip="UI2 button group" supertip="A compact group of related small buttons."/>
+            <button id="btnFASUI2Apply" label="Apply" onAction="Ribbon_ShowcaseButton"/>
+          </buttonGroup>
+          <box id="boxFASUI2Buttons" boxStyle="horizontal">
+            <button id="btnFASUI2BoxLeft" label="Box A" onAction="Ribbon_ShowcaseButton"/>
+            <button id="btnFASUI2BoxRight" label="Box B" onAction="Ribbon_ShowcaseButton"/>
+          </box>
+          <dialogBoxLauncher>
+            <button id="btnFASUI2Launcher" onAction="Ribbon_ShowShortcutSettings"/>
+          </dialogBoxLauncher>
+        </group>
+
+        <group id="grpFASUI2Gallery" label="UI2 Gallery">
+          <gallery id="galFASUI2Styles" label="Visual Presets" columns="3" rows="1" itemWidth="32" itemHeight="32" keytip="G" onAction="Ribbon_ShowcaseGalleryItem" screentip="UI2 gallery" supertip="A grid of selectable visual presets; this demo reports the chosen tile.">
+            <item id="itemFASUI2Chart" label="Chart" imageMso="ChartInsert"/>
+            <item id="itemFASUI2Table" label="Table" imageMso="TableInsert"/>
+            <item id="itemFASUI2Help" label="Help" imageMso="Help"/>
+          </gallery>
+        </group>
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>

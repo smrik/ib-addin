@@ -1,0 +1,8 @@
+*_Backup_*
+*.bak
+*Thumbs.db
+src/~$*
+.DS_Store
+.c*
+build-tools*
+*sync.ffs_db*

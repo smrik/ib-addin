@@ -1,0 +1,23 @@
+name: Source checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  source-checks:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Excel source contracts
+        shell: pwsh
+        run: powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\patriks-tab\tests\source_contract.ps1
+
+      - name: Excel ribbon/callback contracts
+        shell: pwsh
+        run: python .\patriks-tab\tools\validate_vba_source.py
+
+      - name: PowerPoint source contracts
+        shell: pwsh
+        run: powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\Instrumenta\scripts\test-productivity-features.ps1

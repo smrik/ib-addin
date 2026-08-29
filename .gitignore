@@ -1,0 +1,51 @@
+# Local workspace state
+/.scratch/
+/releases/
+/registry-backups/
+/.crush/
+/.codex/
+/.agents/
+**/.git.nested-backup/
+
+# Nested development logs and temporary folders
+**/logs/
+**/*.log
+**/.instrumenta-build-temp/
+**/.recovery-head/
+**/.superpowers/
+**/Lunacy/runs/
+**/backups/
+**/__pycache__/
+**/*.pyc
+
+# Dependencies and vendored runtime copies
+**/node_modules/
+**/vendor/
+
+# Generated Office artifacts and test workbooks
+**/*.xlam
+**/*.ppam
+**/*.xls
+**/*.xlsx
+**/*.xlsb
+**/*.exe
+**/*.zip
+**/*.dmg
+**/*.bak
+**/*.tmp
+**/*.corrupt-*.pptm
+**/*.sync-failed-*.pptm
+
+# Editable PowerPoint host files are source in these projects.
+!Instrumenta/src/InstrumentaPowerpointToolbar.pptm
+!Instrumenta-Keys/src/mac/InstrumentaKeysHelper.pptm
+
+# Standalone runtime copy is generated/distributed separately.
+/Instrumenta Keys Runtime/
+/OfficeRibbonXEditor-SelfContained-NET6-Binaries/
+
+# Local secrets and machine-specific configuration
+**/.env
+**/.env.*
+**/secrets*.json
+**/*credentials*.json

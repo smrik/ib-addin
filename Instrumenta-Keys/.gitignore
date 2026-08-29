@@ -1,0 +1,5 @@
+*_Backup_*
+*.bak
+*Thumbs.db
+src/~$*
+.DS_Store

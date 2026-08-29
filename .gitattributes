@@ -1,0 +1,17 @@
+* text=auto
+
+*.bas text eol=crlf
+*.cls text eol=crlf
+*.frm text eol=crlf
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.json text eol=crlf
+*.xml text eol=crlf
+*.md text eol=crlf
+
+*.frx binary
+*.pptm binary
+*.xlam binary
+*.ppam binary
+*.xlsb binary
+*.xlsx binary

@@ -1,0 +1,14 @@
+<customUI xmlns="http://schemas.microsoft.com/office/2006/01/customui" onLoad="InstrumentaKeysHelperInitialize">
+    <ribbon>
+        <tabs>
+            <tab id="InstrumentaKeysTab" label="[Keys]">
+                <group id="InstrumentaKeysGroup" label="Shortcut helper">
+                     <button id="RunFunctionButton" label="Run Function" onAction="RunFunction" imageMso="MacroPlay"/>
+                </group>
+                <group id="HelperTextGroup" label="Info">
+                    <labelControl id="HelperText" label="This is a helper application for Instrumenta-Keys to receive keyboard shortcuts on the Mac"/>
+                    </group>
+            </tab>
+        </tabs>
+    </ribbon>
+</customUI>

@@ -1,0 +1,159 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Setup development dependencies",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\tools\\setup-dev.ps1",
+        "-InstallNodeDependencies"
+      ],
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Excel: Source contracts",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\patriks-tab\\tests\\source_contract.ps1"
+      ],
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Excel: Ribbon contracts",
+      "type": "process",
+      "command": "python",
+      "args": ["${workspaceFolder}\\patriks-tab\\tools\\validate_vba_source.py"],
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Excel: Build add-in",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\patriks-tab\\tools\\build_xlam.ps1"
+      ],
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Excel: Start test instance",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\patriks-tab\\tools\\start_test_excel.ps1",
+        "-AddInPath",
+        "${input:excelWorkbookPath}",
+        "-Caption",
+        "${input:testInstanceCaption}"
+      ],
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Excel: Watch VBA live sync",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\patriks-tab\\tools\\watch_vba.ps1",
+        "-WorkbookPath",
+        "${input:excelWorkbookPath}"
+      ],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Excel: Smoke test",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\patriks-tab\\tools\\smoke_test.ps1",
+        "-SkipBuild"
+      ],
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "PowerPoint: Source checks",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\Instrumenta\\scripts\\test-productivity-features.ps1"
+      ],
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "PowerPoint: Build dev add-in",
+      "type": "process",
+      "command": "powershell.exe",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\Instrumenta\\scripts\\build-dev.ps1",
+        "-SyncVba",
+        "-NoLaunchSmoke"
+      ],
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run source checks",
+      "dependsOn": [
+        "Excel: Source contracts",
+        "Excel: Ribbon contracts",
+        "PowerPoint: Source checks"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "excelWorkbookPath",
+      "type": "promptString",
+      "description": "Full path of the open Excel dev workbook or add-in",
+      "default": "${workspaceFolder}\\patriks-tab\\dist\\patriks-tab.xlam"
+    },
+    {
+      "id": "testInstanceCaption",
+      "type": "promptString",
+      "description": "Caption for the isolated Excel test instance",
+      "default": "FAS TEST INSTANCE"
+    }
+  ]
+}
